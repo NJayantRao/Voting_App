@@ -13,9 +13,11 @@ app.get('/', (req, res) => {
 
 //importing person router files...
 import {userRouter} from "./routes/userRouter.js"
+import {candidateRouter} from "./routes/candidateRouter.js"
 
 //Use the router
 app.use("/user",userRouter);
+app.use("/candidate",candidateRouter);
 
 app.listen(PORT, () => {
   console.log(`Voting app listening on port ${PORT}`)
