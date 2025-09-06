@@ -34,32 +34,7 @@ router.post("/",jwtAuthMiddleware,async (req,res)=>{
     })
 
 
-//Profile Route
-
-// router.get("/profile",jwtAuthMiddleware,async (req,res)=>{
-//   try {
-//     if(!(checkAdmin(req.user.id)))
-//         return res.status(401).send("Only Admin can access")
-//     const userData= req.user
-
-//     console.log("User Data is:",userData);
-    
-//     const userID= userData.id
-
-//     const user= await Person.findById(userID);
-
-//     res.status(200).json(user)
-    
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send("Internal Server Error")
-    
-//   }
-
-//})
-
-//Profile password route
-
+//UPDATE CANDIDATE
 router.put("/:candidateID",jwtAuthMiddleware,async (req,res)=>{
     try{
         if(!(checkAdmin(req.user.id)))

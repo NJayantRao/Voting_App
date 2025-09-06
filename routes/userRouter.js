@@ -52,7 +52,9 @@ router.get("/login",async(req,res)=>{
 
     const token= generateToken(payload);
 
+    console.log(`the token is ${token}`);
     return res.json({token})
+    
 
   } catch (error) {
     res.status(500).send("Internal Server Error")
@@ -71,7 +73,7 @@ router.get("/profile",jwtAuthMiddleware,async (req,res)=>{
     
     const userID= userData.id
 
-    const user= await Person.findById(userID);
+    const user= await User.findById(userID);
 
     res.status(200).json(user)
     
@@ -84,16 +86,15 @@ router.get("/profile",jwtAuthMiddleware,async (req,res)=>{
 })
 
 //Profile password route
-
-router.put("/profile/password",async (req,res)=>{
+//not
+router.put("/profile/password",jwtAuthMiddleware,async (req,res)=>{
     try{
-        const userId= req.user; //extract id from token
+        const userId= req.user.id; //extract id from token
         const {currentPassword,newPassword}= req.body; // extract the current and new passwords from the body
 
         const user= await User.findById(userId);
 
         //if user doesn't exist or password doesn't match
-
     if(!(await user.comparePassword(currentPassword)))
         return res.status(401).json({error:"Invalid Password"})
 
