@@ -23,5 +23,4 @@ db.on('disconnected',()=>{
 })
 
 //export db connection
-//comment
 export {db};
