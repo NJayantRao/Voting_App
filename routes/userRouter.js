@@ -4,6 +4,7 @@ const userRouter= router
 import { User } from "./../models/users.js"
 import {jwtAuthMiddleware,generateToken} from "./../jwt.js";
 import { mailGenContent, sendMail } from "../mailGen.js";
+import cookieParser from "cookie-parser";
 
 router.post("/signup",async (req,res)=>{
     try{
@@ -60,7 +61,13 @@ router.get("/login",async(req,res)=>{
     const token= generateToken(payload);
 
     console.log(`the token is ${token}`);
-    return res.json({token})
+    
+    const options={
+      httponly: true,
+      secure:true
+    }
+
+    return res.status(200).cookie("token",token,options).json({token})
     
 
   } catch (error) {
