@@ -77,6 +77,33 @@ router.get("/login",async(req,res)=>{
   }
 })
 
+//Logout Route
+router.get("/logout",jwtAuthMiddleware,async(req,res)=>{
+  try {
+    const userId= req.user.id //get id from user
+    await User.findByIdAndUpdate(userId,{
+      $set:{
+        token:""
+      }
+    },
+  {
+    new:true
+  })
+
+  const options={
+    httponly:true,
+    secure:true
+  }
+
+  res.status(200).clearCookie("token",options).send("Logged Out Securely")
+  console.log("Logged Out Securely")
+
+  } catch (error) {
+    res.status(500).send("Internal Server Error")
+    console.log(error);
+  }
+})
+
 //Profile Route
 
 router.get("/profile",jwtAuthMiddleware,async (req,res)=>{
