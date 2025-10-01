@@ -3,6 +3,7 @@ const router= express.Router();
 const userRouter= router
 import { User } from "./../models/users.js"
 import {jwtAuthMiddleware,generateToken} from "./../jwt.js";
+import { mailGenContent, sendMail } from "../mailGen.js";
 
 router.post("/signup",async (req,res)=>{
     try{
@@ -20,13 +21,19 @@ router.post("/signup",async (req,res)=>{
     
     const token= generateToken(payload)
     console.log("The token is:",token);
-    
-    res.json({response:response,token:token}).status(200)
 
+    await sendMail({
+      mail:newUser.email,
+      subject:"Verify your identiy",
+      mailGenContent:mailGenContent(newUser.name,
+        `${req.protocol}://${req.get("host")}/${token}`),
+    })
+    
+    res.status(200).json({response:response,token:token})
     }
     catch(error){
       console.log("The error is ",error)
-      res.send("internal server error").status(500)
+      res.status(500).send("internal server error")
     }
     })
 
